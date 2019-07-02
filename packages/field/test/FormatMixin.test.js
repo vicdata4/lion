@@ -262,7 +262,7 @@ describe('FormatMixin', () => {
       el.errorState = true;
       mimicUserInput(el, 'bar');
       expect(formatterSpy.callCount).to.equal(1);
-      expect(el.formattedValue).to.equal('bar');
+      expect(el.formattedValue).to.equal(undefined);
 
       el.errorState = false;
       mimicUserInput(el, 'bar2');

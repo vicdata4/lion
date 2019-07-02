@@ -355,6 +355,7 @@ describe('<lion-field>', () => {
 
       mimicUserInput(lionField, 'foo');
       expect(formatterSpy.callCount).to.equal(1);
+      expect(lionField.formattedValue).to.equal(undefined);
       expect(lionField.value).to.equal('foo');
     });
   });
