@@ -147,7 +147,11 @@ export class LionButton extends DisabledWithTabIndexMixin(SlotMixin(LitElement))
   updated(changedProperties) {
     super.updated(changedProperties);
     if (changedProperties.has('type')) {
+<<<<<<< HEAD
       const native = this._nativeButtonNode;
+=======
+      const native = this._nativeButton;
+>>>>>>> fix(button): sync type property instead of delegating
       if (native) {
         native.type = this.type;
       }
