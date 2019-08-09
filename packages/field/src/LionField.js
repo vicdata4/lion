@@ -82,19 +82,6 @@ export class LionField extends FormControlMixin(
     }
   }
 
-  // We don't delegate, because we want to preserve caret position via _setValueAndPreserveCaret
-  set value(value) {
-    // if not yet connected to dom can't change the value
-    if (this.inputElement) {
-      this._setValueAndPreserveCaret(value);
-    }
-    this._onValueChanged({ value });
-  }
-
-  get value() {
-    return (this.inputElement && this.inputElement.value) || '';
-  }
-
   constructor() {
     super();
     this.name = '';
@@ -106,7 +93,6 @@ export class LionField extends FormControlMixin(
 
     this._onChange = this._onChange.bind(this);
     this.inputElement.addEventListener('change', this._onChange);
-    this._delegateInitialValueAttr();
     this.classList.add('form-field'); // eslint-disable-line
   }
 
@@ -141,14 +127,14 @@ export class LionField extends FormControlMixin(
     }
   }
 
-  /**
-   * This is not done via 'get delegations', because this.inputElement.setAttribute('value')
-   * does not trigger a value change
-   */
-  _delegateInitialValueAttr() {
-    const valueAttr = this.getAttribute('value');
-    if (valueAttr !== null) {
-      this.value = valueAttr;
+  _requestUpdate(name, oldValue) {
+    super._requestUpdate(name, oldValue);
+    if (name === 'value') {
+      // if not yet connected to dom can't change the value
+      if (this.inputElement) {
+        this._setValueAndPreserveCaret(this.value);
+      }
+      this._onValueChanged({ value: this.value });
     }
   }
 

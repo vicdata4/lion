@@ -113,6 +113,7 @@ describe('<lion-field>', () => {
     expect(el.$$slot('input').value).to.equal('');
     el.value = 'one';
     expect(el.value).to.equal('one');
+    await el.updateComplete;
     expect(el.$$slot('input').value).to.equal('one');
   });
 
@@ -339,7 +340,6 @@ describe('<lion-field>', () => {
           .errorValidators=${[[isBarValidator]]}
         >${inputSlot}</${tag}>
       `);
-
       expect(formatterSpy.callCount).to.equal(0);
       expect(el.formattedValue).to.equal('init-string');
 
@@ -349,7 +349,7 @@ describe('<lion-field>', () => {
 
       mimicUserInput(el, 'foo');
       expect(formatterSpy.callCount).to.equal(1);
-      expect(el.value).to.equal('foo');
+      expect(el.formattedValue).to.equal('foo: bar');
     });
   });
 
