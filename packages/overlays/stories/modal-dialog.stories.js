@@ -1,15 +1,13 @@
 import { storiesOf, html } from '@open-wc/demoing-storybook';
 
 import { css } from '@lion/core';
-import { overlays, ModalDialogController } from '../index.js';
+import { overlays, ModalDialogController, GlobalOverlayController } from '../index.js';
 
 const modalDialogDemoStyle = css`
   .demo-overlay {
     background-color: white;
-    position: fixed;
-    top: 20px;
-    left: 20px;
     width: 200px;
+    z-index: 1;
     border: 1px solid blue;
   }
 
@@ -22,6 +20,41 @@ storiesOf('Global Overlay System|Modal Dialog', module)
   .add('Default', () => {
     const dialogCtrl = overlays.add(
       new ModalDialogController({
+        contentTemplate: () => html`
+          <div class="demo-overlay">
+            <p>Modal dialog</p>
+            <button @click="${() => dialogCtrl.hide()}">Close</button>
+          </div>
+        `,
+      }),
+    );
+
+    return html`
+      <style>
+        ${modalDialogDemoStyle}
+      </style>
+      <a href="#">Anchor 1</a>
+      <button
+        @click="${event => dialogCtrl.show(event.target)}"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+      >
+        Open dialog
+      </button>
+      <a href="#">Anchor 2</a>
+      ${Array(50).fill(
+        html`
+          <p>Lorem ipsum</p>
+        `,
+      )}
+    `;
+  })
+  .add('Placement', () => {
+    const dialogCtrl = overlays.add(
+      new GlobalOverlayController({
+        viewportConfig: {
+          placement: 'bottom',
+        },
         contentTemplate: () => html`
           <div class="demo-overlay">
             <p>Modal dialog</p>

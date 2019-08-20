@@ -7,9 +7,6 @@ import { overlays, GlobalOverlayController } from '../index.js';
 const globalOverlayDemoStyle = css`
   .demo-overlay {
     background-color: white;
-    position: fixed;
-    top: 20px;
-    left: 20px;
     width: 200px;
     border: 1px solid blue;
   }

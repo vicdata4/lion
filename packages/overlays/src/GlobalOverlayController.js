@@ -1,8 +1,8 @@
 import { render } from '@lion/core';
+import { throws } from 'assert';
 import { containFocus } from './utils/contain-focus.js';
 import { globalOverlaysStyle } from './globalOverlaysStyle.js';
 import { setSiblingsInert, unsetSiblingsInert } from './utils/inert-siblings.js';
-import { throws } from 'assert';
 
 const isIOS = navigator.userAgent.match(/iPhone|iPad|iPod/i);
 
@@ -27,6 +27,9 @@ export class GlobalOverlayController {
       preventsScroll: false,
       trapsKeyboardFocus: false,
       hidesOnEsc: false,
+      viewportConfig: {
+        placement: 'center',
+      },
       ...params,
     };
 
@@ -37,6 +40,7 @@ export class GlobalOverlayController {
     this.preventsScroll = finalParams.preventsScroll;
     this.trapsKeyboardFocus = finalParams.trapsKeyboardFocus;
     this.hidesOnEsc = finalParams.hidesOnEsc;
+    this.viewportPlacement = finalParams.viewportConfig.placement;
 
     this._isShown = false;
     this._data = {};
@@ -132,6 +136,7 @@ export class GlobalOverlayController {
         const container = document.createElement('div');
         render(this.contentTemplate(data), container);
         this.contentNode = container.firstElementChild;
+        this.contentNode.style.pointerEvents = 'auto';
       }
 
       this._container.appendChild(this.contentNode);
@@ -154,6 +159,11 @@ export class GlobalOverlayController {
 
   _initializeContainer() {
     const container = document.createElement('div');
+    if (this.viewportPlacement === 'center') {
+      container.style.alignItems = 'center';
+    } else {
+      container.style.alignItems = 'flex-end';
+    }
     container.classList.add(`global-overlays__overlay${this.isBlocking ? '--blocking' : ''}`);
     this._container = container;
     container._overlayController = this;
